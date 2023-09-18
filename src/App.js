@@ -43,7 +43,16 @@ const App = ({signOut, user}) => {
     }
   }
 
-
+  async function deleteOneTodo(id) {
+    try {
+      const response = await API.graphql(graphqlOperation(deleteTodo, {input: {id}}));
+      console.log("Entrée supprimée avec succès", response)
+      let newArray = todos.filter((todo) => todo.id !== id)
+      setTodos(newArray)
+    } catch(error){
+      console.error("Erreur lors de la suppression de l\'entrée", error)
+    }
+  }
 
   return (
     <div style={styles.container}>
@@ -68,7 +77,7 @@ const App = ({signOut, user}) => {
           <View key={todo.id ? todo.id : index} style={styles.todo}>
             <Text style={styles.todoName}>{todo.name}</Text>
             <Text style={styles.todoDescription}>{todo.description}</Text>
-            
+            <Button onClick={e => deleteOneTodo(todo.id)}>Supprimer</Button>
           </View>
         ))
       }
